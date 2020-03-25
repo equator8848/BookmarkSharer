@@ -3,6 +3,6 @@
 
 # 学习Python，爱上Python！
 ## 学习计划
-1. 熟悉Python语法
+1. ['熟悉Python语法'](./learn/lovePython.md)
 2. 熟悉Python Web开发技术栈
 3. 熟悉Python数据分析
