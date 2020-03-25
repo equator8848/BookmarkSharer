@@ -127,11 +127,42 @@ return L
 - 针对尾递归优化的语言可以通过尾递归防止栈溢出。尾递归事实上和循环是等价的，没有循环语句的编程语言只能通过尾递归实现循环
 - Python标准的解释器没有针对尾递归做优化，任何递归函数都存在栈溢出的问题
 # 高级特性
-## 切片
+## 切片 Slice （Java中的substring）
+> 取一个list或tuple的部分元素
+- `L[a:b]`，取`[a,b)`
+- 如果索引a是0，a可以省略
+- 倒数切片 `L[a,b]`，取`[a,b]`范围的元素，b从-1开始
+- 指定切片步长 `L[a:b:c]`
+- 所有数字 `L[:]`，复制数组
+- tuple也是一种list，唯一区别是tuple不可变。因此，tuple也可以用切片操作，只是操作的结果仍是tuple
 ## 迭代
+- list这种数据类型虽然有下标，但很多其他数据类型是没有下标的，但是，只要是可迭代对象，无论有无下标，都可以迭代，比如dict就可以迭代
+- 默认情况下，dict迭代的是key。如果要迭代value，可以用`for value in d.values()`，如果要同时迭代key和value，可以用`for k, v in d.items()`
+- 字符串也是可迭代对象，迭代字符串里的字符
+- 通过isinstance判断是否是Iterable实例从而判断是否是可迭代对象
+- 在迭代时访问下标：使用enumerate函数 `for key, value in enumerate(['A', 'B', 'C'])`
+- 在迭代循环中可以同时引用多个变量，每个变量与迭代元素中的项一一对应
 ## 列表生成器
+> 快速创建一个list
+- `L=[action for x in Li statement]` 对Li中的每一个元素进行statement判断之后，进行action操作
+- 使用嵌套循环输出全排列
+```
+[m + n for m in 'ABC' for n in 'XYZ']
+['AX', 'AY', 'AZ', 'BX', 'BY', 'BZ', 'CX', 'CY', 'CZ']
+```
+- 列表生成器也可以使用多个变量
+- **for前面的if ... else是表达式，而for后面的if是过滤条件，不能带else**
 ## 生成器
+> 利用创建规则创建一个生成器，依次获取list的值而不是一下子创建一个完整的list，节约了内存空间
+- 列表生成器 `L = [x * x for x in range(10)]`，生成器`g = (x * x for x in range(10))`，区别仅在于最外层的[]和()
+- 每次调用next函数，计算生成器的下一个值，当没有更多元素时，抛出StopIteration异常
+- 一般通过for循环迭代生成器对象
+- 使用yield可以将一个函数变成一个生成器，变成generator的函数，在每次调用next()的时候执行，遇到yield语句返回，再次执行时从上次返回的yield语句处继续执行，一般使用for循环迭代
+- 对于函数改成的generator来说，遇到return语句或者执行到函数体最后一行语句，就是结束generator的指令，for循环随之结束
 ## 迭代器
+- 可以直接作用于for循环的对象统称为可迭代对象：Iterable，可以被next()函数调用并不断返回下一个值的对象称为迭代器：Iterator
+- 生成器都是Iterator对象，但list、tuple、dict、set、str虽然是Iterable，却不是Iterator。把list、dict、str等Iterable变成Iterator可以使用iter()函数
+- Python的for循环本质上就是通过不断调用next()函数实现的
 # 函数式编程
 
 # 模块
