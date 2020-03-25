@@ -51,8 +51,35 @@
 - 定义一个空的元组 ()，定义一个只有一个元素的元组，加上逗号避免歧义 (xxx,)
 - tuple所谓的“不变”是说，tuple的每个元素，指向永远不变，但指向的这个东西本身是可变的
 ## 条件判断
+- 只要一个变量是非零数值、非空字符串、非空list等，就判断为True，否则为False
+```
+if statement:
+    do something
+elif statement:
+    do something
+else:
+    do something
+```
 ## 循环
+### for...in 循环
+- 依次迭代list或tuple中的每个元素
+- Python提供一个range()函数，可以生成一个整数序列（从0开始）
+### while循环
+### break与continue
 ## 使用dict以及set
+### dict
+- 字面量定义 `d = {'Michael': 95, 'Bob': 75, 'Tracy': 85}`
+- 添加 `d[key]=value`
+- 删除 `d.pop(key)`
+- 查找 `d[key]`，如果值不存在则会抛出异常；`d.get(key)`，返回默认值None
+- dict的key必须是不可变对象
+### set
+- set和dict类似，也是一组key的集合，但不存储value。由于key不能重复，所以，在set中，没有重复的key
+- 字面量定义 `s = set([1, 2, 3])`
+- 添加 `s.add(key)`
+- 删除 `s.remove(key)`
+### 不可变对象
+- Immutability模式
 # 函数
 
 # 高级特性
