@@ -289,20 +289,203 @@ class Student(object):
 ## 继承与多态
 - 在OOP程序设计中，当我们定义一个class的时候，可以从某个现有的class继承，新的class称为子类（Subclass），而被继承的class称为基类、父类或超类（Base class、Super class）
 - 当子类存在与父类一样的方法时，子类的方法覆盖了父类的方法
+- 啥是多态：在继承关系中，如果一个实例的数据类型是某个子类，那它的数据类型也可以被看做是父类。但是，反过来就不行
+- 多态的好处：调用一个函数或者方法时，可以传入父类和其对应的任何子类，编译器自动调用实际类型的方法
+- 动态语言的“鸭子类型”：它并不要求严格的继承体系，一个对象只要“看起来像鸭子，走起路来像鸭子”，那它就可以被看做是鸭子（只要一个对象有对应的方法，即可调用）
 ## 获取对象信息
+### type()
+- 判断基本数据类型可以直接写int，str
+- 判断一个对象是否是函数：可以使用types模块中定义的常量
+### isinstance()
+- 对于class的继承关系来说，使用type()就很不方便。我们要判断class的类型，可以使用isinstance()函数
+- isinstance()判断的是一个对象是否是该类型本身，或者位于该类型的父继承链上
+- 还可以判断一个变量是否是某些类型中的一种：`isinstance([1, 2, 3], (list, tuple))`
+### dir()
+- 获得一个对象的所有属性和方法，可以使用dir()函数，它返回一个包含字符串的list
+- 仅仅把属性和方法列出来是不够的，配合getattr()、setattr()以及hasattr()，我们可以直接操作一个对象的状态
+- 如果试图获取不存在的属性，会抛出AttributeError的错误，可以传入一个default参数，如果属性不存在，就返回默认值
 ## 实例属性和类属性
+- 在编写程序的时候，千万不要对实例属性和类属性使用相同的名字，因为相同名称的实例属性将屏蔽掉类属性，但是当你删除实例属性后，再使用相同的名称，访问到的将是类属性
+- 如果不是绑定在self上的属性，其为类属性，相当于Java的静态属性
 ## 使用__slots__
+> 限制实例的属性
+- 例子：只允许添加name、age属性
+```
+class Student(object):
+    __slots__ = ('name', 'age') # 用tuple定义允许绑定的属性名称
+```
+- __slots__定义的属性仅对当前类实例起作用，对继承的子类是不起作用的
 ## 使用@property
+- 对于类的方法，装饰器一样起作用。Python内置的@property装饰器就是负责把一个方法变成属性调用的
+- 把一个getter方法变成属性，只需要加上@property就可以了，此时，@property本身又创建了另一个装饰器@score.setter，负责把一个setter方法变成属性赋值，于是，我们就拥有一个可控的属性操作
+```
+class Student(object):
+
+    @property
+    def score(self):
+        return self._score
+
+    @score.setter
+    def score(self, value):
+        if not isinstance(value, int):
+            raise ValueError('score must be an integer!')
+        if value < 0 or value > 100:
+            raise ValueError('score must between 0 ~ 100!')
+        self._score = value
+
+>>> s = Student()
+>>> s.score = 60 # OK，实际转化为s.set_score(60)
+>>> s.score # OK，实际转化为s.get_score()
+60
+>>> s.score = 9999
+Traceback (most recent call last):
+  ...
+ValueError: score must between 0 ~ 100!
+```
+- 可以定义只读属性，只定义getter方法，不定义setter方法就是一个只读属性
 ## 多重继承
+- 多重继承可以避免类的爆炸
+```
+class Dog(Mammal, Runnable):
+    pass
+```
+- MixIn 在设计类的继承关系时，通常，主线都是单一继承下来的，例如，Ostrich继承自Bird。但是，如果需要“混入”额外的功能，通过多重继承就可以实现，比如，让Ostrich除了继承自Bird外，再同时继承Runnable。这种设计通常称之为MixIn
+- MixIn的目的就是给一个类增加多个功能，这样，在设计类的时候，我们优先考虑通过多重继承来组合多个MixIn的功能，而不是设计多层次的复杂的继承关系
 ## 定制类
+> 自定义惯用方法实现类的定制
+### __str__ （相当于Java的toString方法）
+- 直接显示变量调用的不是__str__()，而是__repr__()，两者的区别是__str__()返回用户看到的字符串，而__repr__()返回程序开发者看到的字符串，也就是说，__repr__()是为调试服务的
+### __iter__
+- 如果一个类想被用于for ... in循环，类似list或tuple那样，就必须实现一个__iter__()方法，该方法返回一个迭代对象，然后，Python的for循环就会不断调用该迭代对象的__next__()方法拿到循环的下一个值，直到遇到StopIteration错误时退出循环
+### __getitem__
+- 要表现得像list那样按照下标取出元素，需要实现__getitem__()方法
+### __setitem__
+- 把对象视作list或dict来对集合赋值
+### __delitem__
+- 用于删除某个元素
+### __getattr__
+- 在没有找到属性的情况下，才调用__getattr__，已有的属性，比如name，不会在__getattr__中查找
+- 可以把一个类的所有属性和方法调用全部动态化处理，实现链式调用
+### __call__
+- 任何类，只需要定义一个__call__()方法，就可以直接对实例进行调用
+```
+class Student(object):
+    def __init__(self, name):
+        self.name = name
+
+    def __call__(self):
+        print('My name is %s.' % self.name)
+
+>>> s = Student('Michael')
+>>> s() # self参数不要传入
+My name is Michael.
+```
+- 通过callable()函数，我们就可以判断一个对象是否是“可调用”对象
 ## 枚举类
+- 当需要定义大量常量时，可以为这样的枚举类型定义一个class类型，然后，每个常量都是class的一个唯一实例。Python提供了Enum类来实现这个功能
+```
+from enum import Enum
+
+Month = Enum('Month', ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'))
+可以直接使用Month.Jan来引用一个常量，或者枚举它的所有成员
+```
+- value属性则是自动赋给成员的int常量，默认从1开始计数
+- 如果需要更精确地控制枚举类型，可以从Enum派生出自定义类
+- @unique装饰器可以帮助我们检查保证没有重复值
+```
+from enum import Enum, unique
+
+@unique
+class Weekday(Enum):
+    Sun = 0 # Sun的value被设定为0
+    Mon = 1
+    Tue = 2
+    Wed = 3
+    Thu = 4
+    Fri = 5
+    Sat = 6
+```
+- 既可以用成员名称引用枚举常量，又可以直接根据value的值获得枚举常量
+- Enum可以把一组相关常量定义在一个class中，且class不可变，而且成员可以直接比较
 ## 使用元类
+### type()
+- 动态语言和静态语言最大的不同，就是函数和类的定义，不是编译时定义的，而是运行时动态创建的
+- type()函数既可以返回一个对象的类型，又可以创建出新的类型，比如，我们可以通过type()函数创建出Hello类，而无需通过class Hello(object)...的定义
+```
+>>> def fn(self, name='world'): # 先定义函数
+...     print('Hello, %s.' % name)
+...
+>>> Hello = type('Hello', (object,), dict(hello=fn)) # 创建Hello class
+>>> h = Hello()
+>>> h.hello()
+Hello, world.
+```
+- 要创建一个class对象，type()函数依次传入3个参数
+    - class的名称；
+    - 继承的父类集合，注意Python支持多重继承，如果只有一个父类，别忘了tuple的单元素写法；
+    - class的方法名称与函数绑定，这里我们把函数fn绑定到方法名hello上
+- 通过type()函数创建的类和直接写class是完全一样的，因为Python解释器遇到class定义时，仅仅是扫描一下class定义的语法，然后调用type()函数创建出class
+- 正常情况下，我们都用class Xxx...来定义类，但是，type()函数也允许我们动态创建出类来，也就是说，动态语言本身支持运行期动态创建类，这和静态语言有非常大的不同，要在静态语言运行期创建类，必须构造源代码字符串再调用编译器，或者借助一些工具生成字节码实现，本质上都是动态编译，会非常复杂
+### metaclass
+- 除了使用type()动态创建类以外，要控制类的创建行为，还可以使用metaclass
+- 先定义metaclass，就可以创建类，最后创建实例
+- metaclass允许你创建类或者修改类
+- 动态修改有什么意义？直接在MyList定义中写上add()方法不是更简单吗？正常情况下，确实应该直接写，通过metaclass修改纯属变态。但是，总会遇到需要通过metaclass修改类定义的。ORM就是一个典型的例子。
 # 异常处理
-
+## 错误处理
+- `try...except...finally...`机制：当我们认为某些代码可能会出错时，就可以用try来运行这段代码，如果执行出错，则后续代码不会继续执行，而是直接跳转至错误处理代码，即except语句块，执行完except后，如果有finally语句块，则执行finally语句块
+```
+try:
+    print('try...')
+    r = 10 / 0
+    print('result:', r)
+except ZeroDivisionError as e:
+    print('except:', e)
+finally:
+    print('finally...')
+print('END')
+```
+- 如果没有错误发生，可以在except语句块后面加一个else，当没有错误发生时，会自动执行else语句
+- 所有的错误类型都继承自BaseException，所以在使用except时需要注意的是，它不但捕获该类型的错误，还把其子类也“一网打尽”
+- raise抛出一个异常
+- raise语句如果不带参数，就会把当前错误原样抛出。此外，在except中raise一个Error，还可以把一种类型的错误转化成另一种类型
+## 调试
+### 打印大法 print
+### 断言 assert
+- 启动Python解释器时可以用-O参数来关闭assert。关闭后可以把所有的assert语句当成pass来看
+### 日志 logging
+### 调试器 pdb
+> 以参数-m pdb启动
+- 启动Python的调试器pdb，让程序以单步方式运行，可以随时查看运行状态
+- 输入命令l来查看代码
+- 输入命令n可以单步执行代码
+- 输入命令p 变量名来查看变量
+- 输入命令q结束调试，退出程序
+### 设置断点 pdb.set_trace()
+- 程序会自动在pdb.set_trace()暂停并进入pdb调试环境，可以用命令p查看变量，或者用命令c继续运行
+## 单元测试
+> 测试驱动开发（TDD：Test-Driven Development）
+- 单元测试通过后有什么意义呢？如果我们对abs()函数代码做了修改，只需要再跑一遍单元测试，如果通过，说明我们的修改不会对abs()函数原有的行为造成影响，如果测试不通过，说明我们的修改与原有行为不一致，要么修改代码，要么修改测试
+- 为了编写单元测试，我们需要引入Python自带的unittest模块
+- 编写单元测试时，我们需要编写一个测试类，从unittest.TestCase继承
+- 以test开头的方法就是测试方法，不以test开头的方法不被认为是测试方法，测试的时候不会被执行
+- unittest.TestCase提供了很多内置的条件判断，我们只需要调用这些方法就可以断言输出是否是我们所期望的。最常用的断言就是assertEqual()
+- 另一种重要的断言就是期待抛出指定类型的Error
+- 在命令行通过参数-m unittest直接运行单元测试
+- 可以在单元测试中编写两个特殊的setUp()和tearDown()方法。这两个方法会分别在每调用一个测试方法的前后分别被执行
+## 文档测试
+> 自动执行写在注释中的代码
+- 当模块正常导入时，doctest不会被执行。只有在命令行直接运行时，才执行doctest。所以，不必担心doctest会在非测试环境下执行
 # IO
-
+## 文件读写
+## StringIO与BytesIO
+## 操作文件与目录
+## 序列化
 # 进程与线程
-
+## 多进程
+## 多线程
+## ThreadLocal
+## 分布式进程
 # 正则表达式
 
 # 常用内建模块
