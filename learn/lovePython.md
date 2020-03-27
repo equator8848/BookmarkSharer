@@ -1,5 +1,5 @@
 # Python基础语法
-> 主要是《廖雪峰Python教程》的笔记
+> 主体是《廖雪峰Python教程》的笔记，后续会自己补充内容
 ---
 # Python基础
 ## Python标准文件模板
@@ -750,11 +750,34 @@ def run_thread(n):
 # Web开发
 ## HTTP协议
 ## WSGI接口
+- WSGI（Web Server Gateway Interface）接口定义非常简单，它只要求Web开发者实现一个函数，就可以响应HTTP请求
+- python内置了一个WSGI服务器，这个模块叫wsgiref，它是用纯Python编写的WSGI服务器的参考实现。所谓“参考实现”是指该实现完全符合WSGI标准，但是不考虑任何运行效率，仅供开发和测试使用
 ## Web框架
+- Django：全能型Web框架；
+- web.py：一个小巧的Web框架；
+- Bottle：和Flask类似的Web框架；
+- Tornado：Facebook的开源异步Web框架。
 ## 模板
 ---
 # 异步IO
 ## 协程
+> 协程，又称微线程，纤程。英文名Coroutine
+- 子程序，或者称为函数，在所有语言中都是层级调用，比如A调用B，B在执行过程中又调用了C，C执行完毕返回，B执行完毕返回，最后是A执行完毕。所以子程序调用是通过栈实现的，一个线程就是执行一个子程序。
+- 子程序调用总是一个入口，一次返回，调用顺序是明确的。而协程的调用和子程序不同。协程看上去也是子程序，但执行过程中，在子程序内部可中断，然后转而执行别的子程序，在适当的时候再返回来接着执行。
+- 协程的特点在于是一个线程执行
+- 协程最大的优势就是协程极高的执行效率。因为子程序切换不是线程切换，而是由程序自身控制，因此，没有线程切换的开销，和多线程比，线程数量越多，协程的性能优势就越明显
+- 第二大优势就是不需要多线程的锁机制，因为只有一个线程，也不存在同时写变量冲突，在协程中控制共享资源不加锁，只需要判断状态就好了，所以执行效率比多线程高很多
+- 利用多核CPU最简单的方法是多进程+协程，既充分利用多核，又充分发挥协程的高效率，可获得极高的性能
+- Python对协程的支持是通过generator实现的。在generator中，我们不但可以通过for循环来迭代，还可以不断调用next()函数获取由yield语句返回的下一个值。但是Python的yield不但可以返回一个值，它还可以接收调用者发出的参数。
+- 子程序就是协程的一种特例 —— Donald Knuth
 ## asyncio
+> asyncio的编程模型就是一个消息循环。我们从asyncio模块中直接获取一个EventLoop的引用，然后把需要执行的协程扔到EventLoop中执行，就实现了异步IO
+- 异步操作需要在coroutine中通过yield from完成
+- 多个coroutine可以封装成一组Task然后并发执行
 ## async/await
+> 为了简化并更好地标识异步IO，从Python 3.5开始引入了新的语法async和await，可以让coroutine的代码更简洁易读
+- async和await是针对coroutine的新语法，要使用新的语法，只需要做两步简单的替换
+    - 把@asyncio.coroutine替换为async
+    - 把yield from替换为await
 ## aiohttp
+> asyncio实现了TCP、UDP、SSL等协议，aiohttp则是基于asyncio实现的HTTP框架
