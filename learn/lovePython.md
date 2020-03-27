@@ -669,23 +669,40 @@ def run_thread(n):
 - 编译后生成Regular Expression对象，由于该对象自己包含了正则表达式，所以调用对应的方法时不用给出正则字符串
 ---
 # 常用内建模块
+> Python之所以自称“batteries included”，就是因为内置了许多非常有用的模块，无需额外安装和配置，即可直接使用
 ## datetime
+> 时间与日期
 ## collections
+> 高级集合
 ## base64
+> Base64是一种用64个字符来表示任意二进制数据的方法
 ## struct
+> 解决bytes和其他二进制数据类型的转换
 ## hashlib
+> 提供了常见的摘要算法，如MD5，SHA1等
 ## hmac
+> Hmac算法：Keyed-Hashing for Message Authentication。它通过一个标准算法，在计算哈希的过程中，把key混入计算过程中
 ## itertools
+> 提供了非常有用的用于操作迭代对象的函数
 ## contextlib
+> 只要正确实现了上下文管理，就可以用于with语句
 ## urllib
+> urllib提供了一系列用于操作URL的功能
 ## XML
+> 操作XML
 ## HTMLParser
+> 解析HTML
 ---
 # 常用第三方库
 ## Pillow
+> PIL：Python Imaging Library，已经是Python平台事实上的图像处理标准库了
 ## requests
+> 一个Python第三方库，处理URL资源特别方便
 ## charset
+> 检测编码
 ## psutil
+>在Python中获取系统信息的另一个好办法是使用psutil这个第三方模块。顾名思义，psutil = process and system utilities，它不仅可以通过一两行代码实现系统监控，还可以跨平台使用
+---
 # 虚拟环境
 ---
 # 网络编程
