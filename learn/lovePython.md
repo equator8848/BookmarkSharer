@@ -715,17 +715,37 @@ def run_thread(n):
 ## 原理
 - virtualenv是如何创建“独立”的Python运行环境的呢？原理很简单，就是把系统Python复制一份到virtualenv的环境，用命令source venv/bin/activate进入一个virtualenv环境时，virtualenv会修改相关环境变量，让命令python和pip均指向当前的virtualenv环境
 ---
+# GUI
+> Python内置的Tkinter可以满足基本的GUI程序的要求，如果是非常复杂的GUI程序，建议用操作系统原生支持的语言和库来编写
+- 我们编写的Python代码会调用内置的Tkinter，Tkinter封装了访问Tk的接口；Tk是一个图形库，支持多个操作系统，使用Tcl语言开发；Tk会调用操作系统提供的本地GUI接口，完成最终的GUI。所以，我们的代码只需要调用Tkinter提供的接口就可以了
+--- 
 # 网络编程
+> 网络编程对所有开发语言都是一样的，Python也不例外。用Python进行网络编程，就是在Python程序本身这个进程内，连接别的服务器进程的通信端口进行通信
 ## TCP/IP
 ## TCP编程
 ## UDP编程
 ---
 # 电子邮件
+- 电子邮件软件被称为MUA：Mail User Agent——邮件用户代理
+- Email从MUA发出去，不是直接到达对方电脑，而是发到MTA：Mail Transfer Agent——邮件传输代理，就是那些Email服务提供商，比如网易、新浪等等
+- 发邮件时，MUA和MTA使用的协议就是SMTP：Simple Mail Transfer Protocol，后面的MTA到另一个MTA也是用SMTP协议
+- 收邮件时，MUA和MDA使用的协议有两种：POP：Post Office Protocol，目前版本是3，俗称POP3；IMAP：Internet Message Access Protocol，目前版本是4，优点是不但能取邮件，还可以直接操作MDA上存储的邮件，比如从收件箱移到垃圾箱，等等
 ## SMTP发送邮件
+- SMTP是发送邮件的协议，Python内置对SMTP的支持，可以发送纯文本邮件、HTML邮件以及带附件的邮件
+- Python对SMTP支持有smtplib和email两个模块，email负责构造邮件，smtplib负责发送邮件
 ## POP3接收邮件
+- Python内置一个poplib模块，实现了POP3协议，可以直接用来收邮件
+- POP3协议收取的不是一个已经可以阅读的邮件本身，而是邮件的原始文本，这和SMTP协议很像，SMTP发送的也是经过编码后的一大段文本。要把POP3收取的文本变成可以阅读的邮件，还需要用email模块提供的各种类来解析原始文本，变成可阅读的邮件对象
 ---
 # 数据库操作
+## 访问SQLite
+- SQLite是一种嵌入式数据库，它的数据库就是一个文件。由于SQLite本身是C写的，而且体积很小，所以，经常被集成到各种应用程序中，甚至在iOS和Android的App中都可以集成
+- Python就内置了SQLite3，所以，在Python中使用SQLite，不需要安装任何东西，直接使用
 ## 访问Mysql
+- MySQL是Web世界中使用最广泛的数据库服务器
+## SQLAlchemy
+- 数据库表是一个二维表，包含多行多列。把一个表的内容用Python的数据结构表示出来的话，可以用一个list表示多行，list的每一个元素是tuple，表示一行记录。
+- 但是用tuple表示一行很难看出表的结构。如果把一个tuple用class实例来表示，就可以更容易地看出表的结构来。（即ORM技术：Object-Relational Mapping，把关系数据库的表结构映射到对象上）
 ---
 # Web开发
 ## HTTP协议
