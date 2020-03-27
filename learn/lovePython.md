@@ -704,6 +704,16 @@ def run_thread(n):
 >在Python中获取系统信息的另一个好办法是使用psutil这个第三方模块。顾名思义，psutil = process and system utilities，它不仅可以通过一两行代码实现系统监控，还可以跨平台使用
 ---
 # 虚拟环境
+> 在开发Python应用程序的时候，系统安装的Python3只有一个版本：3.4。所有第三方的包都会被pip安装到Python3的site-packages目录下
+- 每个应用可能需要各自拥有一套“独立”的Python运行环境。virtualenv就是用来为一个应用创建一套“隔离”的Python运行环境（virtualenv是第三方库）
+## 安装
+- pip3 install virtualenv
+## 创建虚拟环境
+1. 创建目录 `mkdir myproject`、`cd myproject`
+2. 创建一个独立的Python运行环境，命名为venv `virtualenv --no-site-packages venv` （加上了参数--no-site-packages，这样，已经安装到系统Python环境中的所有第三方包都不会复制过来，这样，我们就得到了一个不带任何第三方包的“干净”的Python运行环境）
+3. 新建的Python环境被放到当前目录下的venv目录。有了venv这个Python环境，可以用source进入该环境 `source venv/bin/activate`
+## 原理
+- virtualenv是如何创建“独立”的Python运行环境的呢？原理很简单，就是把系统Python复制一份到virtualenv的环境，用命令source venv/bin/activate进入一个virtualenv环境时，virtualenv会修改相关环境变量，让命令python和pip均指向当前的virtualenv环境
 ---
 # 网络编程
 ## TCP/IP
