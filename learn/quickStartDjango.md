@@ -80,12 +80,92 @@ app_name/
 
 # 模板
 - 在应用根目录创建templates目录
-- 
+- 应该在应用的templates目录创建以应用名称命名的目录来避免重名
+- 引用的时候使用相对路径引用 `polls/xxx.html`
+## 渲染模板并返回HttpResponse
+### 传统做法
+```
+from django.http import HttpResponse
+from django.template import loader
+
+from .models import Question
 
 
+def index(request):
+    latest_question_list = Question.objects.order_by('-pub_date')[:5]
+    template = loader.get_template('polls/index.html')
+    context = {
+        'latest_question_list': latest_question_list,
+    }
+    return HttpResponse(template.render(context, request))
+```
+### 使用快捷函数 render()
+> render()函数将请求对象作为它的第一个参数，模板名作为它的第二个参数，字典作为它的第三个可选参数。它返回使用给定上下文呈现的给定模板的HttpResponse对象
+```
+from django.shortcuts import render
+
+from .models import Question
 
 
+def index(request):
+    latest_question_list = Question.objects.order_by('-pub_date')[:5]
+    context = {'latest_question_list': latest_question_list}
+    return render(request, 'polls/index.html', context)
+```
+## 抛出异常
+- 抛出一个404异常
+```
+from django.shortcuts import render
 
+from .models import Question
+# ...
+def detail(request, question_id):
+    try:
+        question = Question.objects.get(pk=question_id)
+    except Question.DoesNotExist:
+        raise Http404("Question does not exist")
+    return render(request, 'polls/detail.html', {'question': question})
+```
+- 使用快捷函数抛出404异常 get_object_or_404()
+```
+from django.shortcuts import get_object_or_404, render
+
+from .models import Question
+# ...
+def detail(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    return render(request, 'polls/detail.html', {'question': question})
+```
+- get_list_or_404() 函数，工作原理和 get_object_or_404() 一样，除了 get() 函数被换成了 filter() 函数。如果列表为空的话会抛出 Http404 异常
+## 避免URL硬编码
+- 硬编码和强耦合的链接，对于一个包含很多应用的项目来说，修改起来是十分困难的
+- 然而因为在polls.urls的url()函数中通过name参数为URL定义了名字，你可以使用`{% url %}`标签代替它
+```
+<li><a href="/polls/{{ question.id }}/">{{ question.question_text }}</a></li>
+修改为
+<li><a href="{% url 'detail' question.id %}">{{ question.question_text }}</a></li>
+```
+## 为URL添加命名空间
+- 在一个真实的 Django 项目中，可能会有五个，十个，二十个，甚至更多应用。Django 如何分辨重名的 URL？
+```
+from django.urls import path
+
+from . import views
+
+app_name = 'polls'
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('<int:question_id>/', views.detail, name='detail'),
+    path('<int:question_id>/results/', views.results, name='results'),
+    path('<int:question_id>/vote/', views.vote, name='vote'),
+]
+```
+- 修改对应的模板
+```
+<li><a href="{% url 'detail' question.id %}">{{ question.question_text }}</a></li>
+修改为
+<li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
+```
 
 
 
