@@ -1,11 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
-
 # Create your views here.
+from .models import Question
+
 
 def index(req):
-    return HttpResponse("Hello World ! You're at the polls app index.")
+    latest_question_list = Question.objects.order_by('-pub_date')[:5]
+    result = ','.join([q.question_text for q in latest_question_list])
+    return HttpResponse(result)
 
 
 def details(req, question_id):

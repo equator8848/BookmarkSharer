@@ -75,7 +75,12 @@ app_name/
 - 创建管理员账号 `python manage.py createsuperuser`，输入用户名、邮箱、密码
 - 管理自定义模型 在`polls/admin`中配置`admin.site.register(Question)`
 
+# 再议视图
+- 每个视图必须要做的只有两件事：返回一个包含被请求页面内容的 HttpResponse 对象，或者抛出一个异常，比如 Http404
 
+# 模板
+- 在应用根目录创建templates目录
+- 
 
 
 
