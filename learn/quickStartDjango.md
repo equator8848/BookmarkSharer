@@ -167,7 +167,33 @@ urlpatterns = [
 <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
 ```
 
+# 通用视图
+> 这些视图反映基本的 Web 开发中的一个常见情况：根据 URL 中的参数从数据库中获取数据、载入模板文件然后返回渲染后的模板。 由于这种情况特别常见，Django 提供一种快捷方式，叫做“通用视图”系统
+##  ListView
+- 显示一个对象列表
+- ListView 使用一个叫做 <app name>/<model name>_list.html 的默认模板；我们使用 template_name 来告诉 ListView 使用我们创建的已经存在的 "polls/index.html" 模板
+## DetailView
+- 显示一个特定类型对象的详细信息页面
+- DetailView 期望从 URL 中捕获名为 "pk" 的主键值，所以我们为通用视图把参数改成pk
+- 默认情况下，通用视图 DetailView 使用一个叫做 <app name>/<model name>_detail.html 的模板
 
+# 自动化测试
+- 自动化测试是由某个系统帮你自动完成的。当你创建好了一系列测试，每次修改应用代码后，就可以自动检查出修改后的代码是否还像你曾经预期的那样正常工作。你不需要花费大量时间来进行手动测试
+## 代码测试
+- 测试一个应用 `python manage.py test polls`
+- Django如何寻找 polls 应用里的测试代码
+    - 找django.test.TestCase的子类
+    - 在类中寻找测试方法即以test开头的方法
+## 视图测试
+- Django 提供了一个供测试使用的 Client 来模拟用户和视图层代码的交互。我们能在 tests.py 甚至是 shell 中使用它
+## 测试用例
+- 当需要测试的时候，测试用例越多越好
+
+# 静态资源
+- django.contrib.staticfiles 存在的意义：它将各个应用的静态文件（和一些你指明的目录里的文件）统一收集起来，这样一来，在生产环境中，这些文件就会集中在一个便于分发的地方
+- Django 将在应用的static目录下查找静态文件，同样以应用名创建目录以隔离资源重名问题
+- images目录一般创建在`polls/static/polls`下
+- `{% static %}` 等模板标签在静态文件（例如样式表）中是不可用的，因为它们不是由 Django 生成的。你仍需要使用**相对路径**的方式在你的静态文件之间互相引用
 
 
 
