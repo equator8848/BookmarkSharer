@@ -4,5 +4,6 @@
 # 学习Python，爱上Python！
 ## 学习计划
 1. [熟悉Python语法](learn/learnPython.md)
-2. [熟悉Python Web开发框架Django](learn/learnDjango.md)
-3. 熟悉Python数据分析
+2. [快速入门 Django](learn/quickStartDjango.md)
+3. [系统学习 Django](learn/learnDjango.md)
+4. 熟悉Python数据分析
