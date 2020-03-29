@@ -4,6 +4,7 @@
 - Django 支持许多其他部署选项。一个是 uWSGI ；它和 nginx 配合使用很好。此外，Django 遵循 WSGI 规范（ PEP 3333 ），允许它在各种服务器平台上运行
 # 模型和数据库
 > 模型准确且唯一的描述了数据，它包含储存的数据的重要字段和行为。一般来说，每一个模型都映射一张数据库表
+- Django连接MySQL时默认使用MySQLdb驱动，但MySQLdb不支持Python3，因此需要将MySQL驱动设置为pymysql
 ## 模型
 ## 执行查询
 ## 聚合
@@ -12,13 +13,64 @@
 ## 执行原生SQL
 ## 数据库事务
 ## 多数据库
+### 定义数据库
+- 即使没有默认数据库，也要保留该字段（这样，你必须为所有的模型，包括你所使用的任何 contrib 和第三方 app 设置 DATABASE_ROUTERS，所以不会有任何查询路由到默认数据库）
+```
+# 在setting.py中配置
+import pymysql
+pymysql.install_as_MySQLdb()
+```
+```
+DATABASES = {
+    'default': {},
+    'users': {
+        'NAME': 'user_data',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'mysql_user',
+        'PASSWORD': 'superS3cret'
+    },
+    'customers': {
+        'NAME': 'customer_data',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'mysql_cust',
+        'PASSWORD': 'veryPriv@ate'
+    }
+}
+```
+### 同步数据库
+- migrate 管理命令一次只在一个数据库上进行操作。默认情况下，它在 default 数据库上操作，但提供 --database 的话，它可以同步到不同数据库
+```
+$ ./manage.py migrate # 配置了默认数据库的情况下
+$ ./manage.py migrate --database=users
+```
+- 大部分 django-admin 命令像 migrate 一样操作数据库——它们一次只操作一个数据库，使用 --database  来控制所要使用的数据库
+- 这个规则的一个例外是 makemigrations 命令。它验证数据库中的迁移历史，以便在创建新迁移之前发现现有迁移文件的问题（这可能是修改它们所产生）。默认情况下，它只检查 default 数据库，但建议在任何模型安装时，执行routers的allow_migrate()方法
+### 自动数据库路由
+- 默认路由方案确保对象对原始数据库保持粘性（比如，从 foo 数据库检索到的对象将被保持到同一个数据库）。默认路由方案确保当数据库没有指定时，所有查询回退到 default 数据库
+- 默认路由在每个Django项目上是开箱即用的。如果想实现更多有趣的数据库分配行为，可以定义和安装自己的数据库路由
+- 数据库路由是一个类，它提供四种方法
+    - db_for_read(model, **hints) 建议用于读取“模型”类型对象的数据库
+    - db_for_write(model, **hints) 建议用于写入模型类型对象的数据库
+    - allow_relation(obj1, obj2, **hints) 如果允许 obj1 和 obj2 之间的关系，返回 True 。如果阻止关系，返回 False
+    - allow_migrate(db, app_label, model_name=None, **hints) 决定是否允许迁移操作在别名为 db 的数据库上运行。如果操作运行，那么返回 True ，如果没有运行则返回 False ，或路由没有意见则返回 None
+- 数据库路由 DATABASE_ROUTERS 配置安装。这个配置定义类名列表，每个类名指定了主路由(django.db.router)应使用的路由
+- Django 的数据库操作使用主路由来分配数据库使用。每当查询需要知道正在使用哪个数据库时，它会调用主路由，提供一个模型和提示（如果可用的话），然后 Django 会依次尝试每个路由直到找到数据库。如果没有找到，它试着访问提示实例的当前 _state.db。如果没有提供提示实例，或者实例没有当前数据库状态，主路由将分配默认数据库
+### 手动选择路由
+- 查询 `Author.objects.using('default').all()`
+- 保存 `my_object.save(using='legacy_users')`
+- 删除
+```
+>>> u = User.objects.using('legacy_users').get(username='fred')
+>>> u.delete() # will delete from the `legacy_users` database
+```
 ## 表空间
 ## 数据库连接优化
 ## 数据库工具
 ## 模型关联API
 ## 数据库逆向工程
 - 在数据库中创建表
-- 逆向工程生成 `model.py` ：`python manage.py inspectdb`
+- 逆向工程 peek，并不产生新的文件 `model.py` ：`python manage.py inspectdb`
+- 导入到应用中 `python manage.py inspectdb > sharer/models.py`
 # 处理HTTP请求
 # 使用表单
 # 模板

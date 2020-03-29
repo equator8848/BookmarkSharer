@@ -5,7 +5,6 @@
 - BookmarkSharer 源码目录
     - bookmark 谷歌浏览器书签目录
     - BookmarkSharer Django 项目
-    - polls Django示例应用
     - sharer Django 实战应用（数据库配置等敏感信息已去除）
 - learn 学习笔记目录
 - push.sh 快捷提交脚本
