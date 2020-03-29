@@ -1,4 +1,8 @@
 > 快速入门Django，主体基于官方文档
+# 概述
+- Django与标准的MVC框架不太一样，Django的MVC对应的是Model、Template、View
+- 可以这么说， Django 是一个 "MTV " 框架，即 "模型(Model) "、 "模板(Template)" 和 "视图(View)
+- 在 Django 中，控制器可能指的是框架本身，框架会根据 Django 的 URL 配置，将请求分发到适当的视图（view）
 # 安装Django
 - pip安装 `python -m pip install Django`
 - 检验

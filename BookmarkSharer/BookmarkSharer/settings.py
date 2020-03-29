@@ -29,6 +29,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'sharer.apps.SharerConfig'
     'polls.apps.PollsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -75,6 +76,14 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'mysql': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'db_bookmark_sharer',
+        'USER': 'root',
+        'PASSWORD': 'LBJ.19980707',
+        'HOST': '132.232.2.232',
+        'PORT': '3306'
     }
 }
 
