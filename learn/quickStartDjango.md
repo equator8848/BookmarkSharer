@@ -195,16 +195,95 @@ urlpatterns = [
 - images目录一般创建在`polls/static/polls`下
 - `{% static %}` 等模板标签在静态文件（例如样式表）中是不可用的，因为它们不是由 Django 生成的。你仍需要使用**相对路径**的方式在你的静态文件之间互相引用
 
+# 自定义管理页面
+## 自定义后台表单
+- 重排字段
+```
+from django.contrib import admin
+
+from .models import Question
 
 
+class QuestionAdmin(admin.ModelAdmin):
+    fields = ['pub_date', 'question_text']
+
+admin.site.register(Question, QuestionAdmin)
+```
+- 将表单分为几个字段集
+``` 
+from django.contrib import admin
+
+from .models import Question
 
 
+class QuestionAdmin(admin.ModelAdmin):
+    # fieldsets 元组中的第一个元素是字段集的标题
+    fieldsets = [
+        (None,               {'fields': ['question_text']}),
+        ('Date information', {'fields': ['pub_date']}),
+    ]
+
+admin.site.register(Question, QuestionAdmin)
+```
+## 添加关联对象
+- 每个使用 ForeignKey 关联到另一个对象的对象可以在添加时添加其关联的对象
+- 可以在创建被参照对象是一起创建参照对象
+``` 
+from django.contrib import admin
+
+from .models import Choice, Question
+
+# StackedInline改为TabularInline，可以使得关联对象以一种表格式的方式展示，显得更加紧凑
+class ChoiceInline(admin.StackedInline):
+    model = Choice # 定义关联模型
+    extra = 3 # 定义插槽数目
 
 
+class QuestionAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None,               {'fields': ['question_text']}),
+        ('Date information', {'fields': ['pub_date'], 'classes': ['collapse']}),
+    ]
+    inlines = [ChoiceInline]
 
-
-
-
+admin.site.register(Question, QuestionAdmin)
+```
+## 自定义后台更改列表
+- 默认情况下，Django 显示每个对象的 str() 返回的值。但有时如果我们能够显示单个字段，它会更有帮助。为此，使用 list_display 后台选项，它是一个包含要显示的字段名的元组，在更改列表页中以列的形式展示这个对象
+```
+class QuestionAdmin(admin.ModelAdmin):
+    # ...
+    list_display = ('question_text', 'pub_date', 'was_published_recently')
+```
+- 可以点击列标题来对这些行进行排序
+- 过滤器，使用 list_filter
+``` 
+list_filter = ['pub_date']
+```
+- 搜索框 在列表的顶部增加一个搜索框。当输入待搜项时，Django 将搜索 question_text 字段。你可以使用任意多的字段——由于后台使用 LIKE 来查询数据，将待搜索的字段数限制为一个不会出问题大小，会便于数据库进行查询操作
+```
+search_fields = ['question_text']
+```
+## 自定义工程模板
+- 在工程目录（指包含 manage.py 的那个文件夹）内创建一个名为 templates 的目录
+- 在 TEMPLATES 设置中添加 DIRS 选项，DIRS 是一个包含多个系统目录的文件列表，用于在载入 Django 模板时使用，是一个待搜索路径
+```
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+```
 
 
 
