@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>可点击词云测试</title>
+    <style>
+        .word {
+            border: 1px gold solid;
+            padding: 8px;
+            margin: 4px;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+
+</div>
+<script>
+    const words = [{'name': 'Google', 'weight': 50},
+        {'name': 'Alibaba', 'weight': 99},
+        {'name': 'ByteDance', 'weight': 200},
+        {'name': 'Baidu', 'weight': 10},
+        {'name': '优酷', 'weight': 14},
+        {'name': '滴滴', 'weight': 160},
+        {'name': '美团', 'weight': 66},
+        {'name': 'Alibaba', 'weight': 99},
+        {'name': '鲟鱼酱旅行', 'weight': 85},
+        {'name': 'Baidu', 'weight': 10},
+        {'name': 'Tencent', 'weight': 30}]
+    //words.sort((w1, w2) => w2['weight'] - w1['weight'])
+    words.sort((w1, w2) => w1['weight'] - w2['weight'])
+    const container = document.getElementById('container')
+    words.forEach((word) => {
+        // console.log(word)
+        // console.log(word['name'])
+        let wordDiv = document.createElement('div');
+        wordDiv.innerText = word['name'];
+        wordDiv.className = 'word'
+        wordDiv.style.fontSize = word['weight'] + 'px'
+        console.log(wordDiv.style.fontSize)
+        container.appendChild(wordDiv);
+    })
+
+</script>
+</body>
+</html>
