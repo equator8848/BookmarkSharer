@@ -394,6 +394,15 @@ from enum import Enum
 Month = Enum('Month', ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'))
 可以直接使用Month.Jan来引用一个常量，或者枚举它的所有成员
 ```
+- 示例
+```
+class StatusCode(Enum):
+    SUCCESS = 2000
+    BAD_REQUEST = 4000
+    PARAMETER_ERROR = 4001
+    FORBIDDEN = 4003
+    SERVER_ERROR = 5000
+```
 - value属性则是自动赋给成员的int常量，默认从1开始计数
 - 如果需要更精确地控制枚举类型，可以从Enum派生出自定义类
 - @unique装饰器可以帮助我们检查保证没有重复值
@@ -436,6 +445,62 @@ Hello, world.
 - 先定义metaclass，就可以创建类，最后创建实例
 - metaclass允许你创建类或者修改类
 - 动态修改有什么意义？直接在MyList定义中写上add()方法不是更简单吗？正常情况下，确实应该直接写，通过metaclass修改纯属变态。但是，总会遇到需要通过metaclass修改类定义的。ORM就是一个典型的例子。
+## 实例方法、类方法、静态方法
+### Python的三种方法
+- 普通实例方法，第一个参数需要是self，它表示一个具体的实例本身
+- 如果用了classmethod注解，它的第一个参数不是self而是cls，它表示这个类本身
+- 如果用了staticmethod注解，那么就可以无视这个self，而将这个方法当成一个普通的函数使用
+- 实例方法只能被实例对象调用，静态方法(由@staticmethod装饰的方法)、类方法(由@classmethod装饰的方法)，可以被类或类的实例对象调用
+### 类方法与静态方法的区别
+- 类方法用在模拟java定义多个构造函数的情况：由于python类中只能有一个初始化方法，不能按照不同的情况初始化类
+```
+class Book(object):
+
+    def __init__(self, title):
+        self.title = title
+
+    @classmethod
+    def class_method_create(cls, title):
+        book = cls(title=title)
+        return book
+
+    @staticmethod
+    def static_method_create(title):
+        book= Book(title)
+        return book
+
+book1 = Book("use instance_method_create book instance")
+book2 = Book.class_method_create("use class_method_create book instance")
+book3 = Book.static_method_create("use static_method_create book instance")
+print(book1.title)
+print(book2.title)
+print(book3.title)
+```
+- 类中静态方法方法调用静态方法和类方法调用静态方法：静态方法调用另一个静态方法，如果改用类方法调用静态方法，可以让cls代替类
+```
+class Foo(object):
+    X = 1
+    Y = 2
+
+    @staticmethod
+    def averag(*mixes):
+        return sum(mixes) / len(mixes)
+
+    @staticmethod
+    def static_method():  # 在静态方法中调用静态方法
+        print "在静态方法中调用静态方法"
+        return Foo.averag(Foo.X, Foo.Y)
+
+    @classmethod
+    def class_method(cls):  # 在类方法中使用静态方法
+        print "在类方法中使用静态方法"
+        return cls.averag(cls.X, cls.Y)
+
+foo = Foo()
+print(foo.static_method())
+print(foo.class_method())
+```
+- 继承类中的区别？
 ---
 # 异常处理
 ## 错误处理

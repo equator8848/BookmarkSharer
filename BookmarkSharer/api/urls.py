@@ -17,7 +17,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('analysis/', include('api.modules.analysis.urls')),
-    path('click_log/', include('api.modules.click_log.urls')),
+    path('click/', include('api.modules.click.urls')),
     path('label/', include('api.modules.label.urls')),
     path('site/', include('api.modules.site.urls')),
     path('test/', include('api.modules.test.urls')),
