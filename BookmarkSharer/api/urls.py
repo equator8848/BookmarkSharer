@@ -15,8 +15,11 @@ Including another URLconf
 """
 from django.urls import path, include
 
-from . import views
-
 urlpatterns = [
-    path(r'test/ping', views.test_ping, name='test_ping')
+    path('analysis/', include('api.modules.analysis.urls')),
+    path('click_log/', include('api.modules.click_log.urls')),
+    path('label/', include('api.modules.label.urls')),
+    path('site/', include('api.modules.site.urls')),
+    path('test/', include('api.modules.test.urls')),
+    path('user/', include('api.modules.user.urls'))
 ]
