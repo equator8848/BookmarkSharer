@@ -2,7 +2,7 @@
 
 last_modified_time=$(stat requirements.txt | sed -n '6p' | awk '{print $2,$3}')
 
-last_modified_timestamp=$(date -d "$last_modified" +"%s")
+last_modified_timestamp=$(date -d "$last_modified_time" +"%s")
 
 now_timestamp=$(date +%s)
 

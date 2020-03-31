@@ -8,7 +8,7 @@
     - BookmarkSharer Django 项目
     - sharer Django 实战应用（数据库配置等敏感信息已去除）
 - learn 学习笔记目录
-- push.sh 快捷提交脚本
+- push.sh 快捷提交脚本，每隔一小时更新一次python依赖文件requirements.txt，自动提交到github
 
 # 学习Python！
 ## 学习计划
