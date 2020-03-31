@@ -19,6 +19,7 @@ urlpatterns = [
     path('analysis/', include('api.modules.analysis.urls')),
     path('click/', include('api.modules.click.urls')),
     path('label/', include('api.modules.label.urls')),
+    path('security/', include('api.modules.security.urls')),
     path('site/', include('api.modules.site.urls')),
     path('test/', include('api.modules.test.urls')),
     path('upload/', include('api.modules.upload.urls')),

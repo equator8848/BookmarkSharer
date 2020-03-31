@@ -11,3 +11,8 @@ pymysql.install_as_MySQLdb()
 ```
 pip install -U mysqlclient
 ```
+# 关于import
+## 导入模块
+- `from . import module_abc`
+## 导入类
+- `from .ClassX import ClassX`
