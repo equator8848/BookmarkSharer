@@ -1,0 +1,6 @@
+asgiref==3.2.7
+Django==2.1.2
+django-cors-headers==3.2.1
+PyMySQL==0.9.3
+pytz==2019.3
+sqlparse==0.3.1

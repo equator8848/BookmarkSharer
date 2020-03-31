@@ -7,7 +7,7 @@ def ping(req):
     data = {
         'status': 200,
         'msg': 'pong',
-        'data': '阿里架构师李俊锋早上好'
+        'data': '示例api'
     }
     return Response.success('good job !', data)
 
