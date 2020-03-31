@@ -4,7 +4,6 @@
 - Django 支持许多其他部署选项。一个是 uWSGI ；它和 nginx 配合使用很好。此外，Django 遵循 WSGI 规范（ PEP 3333 ），允许它在各种服务器平台上运行
 # 模型和数据库
 > 模型准确且唯一的描述了数据，它包含储存的数据的重要字段和行为。一般来说，每一个模型都映射一张数据库表
-- Django连接MySQL时默认使用MySQLdb驱动，但MySQLdb不支持Python3，因此需要将MySQL驱动设置为pymysql
 ## 模型
 ## 执行查询
 ## 聚合

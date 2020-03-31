@@ -9,7 +9,7 @@ now_timestamp=$(date +%s)
 # seconds
 modified_threshold=3600
 
-if [ $(($now_timestamp-$last_modified_timestamp)) -ge $modified_threshold ]; then
+if [ $((now_timestamp - last_modified_timestamp)) -ge $modified_threshold ]; then
   echo 'create new requirements.txt ...'
   pip freeze >requirements.txt
 fi

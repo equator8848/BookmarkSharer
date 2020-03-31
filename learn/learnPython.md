@@ -757,6 +757,9 @@ def run_thread(n):
 > 操作XML
 ## HTMLParser
 > 解析HTML
+- HTMLParser自动将tag和attrs都转为小写
+- 自定义一个类，继承自HTMLParser，实现其方法
+- 实际上很垃圾
 ---
 # 常用第三方库
 ## Pillow

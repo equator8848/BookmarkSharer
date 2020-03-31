@@ -21,5 +21,6 @@ urlpatterns = [
     path('label/', include('api.modules.label.urls')),
     path('site/', include('api.modules.site.urls')),
     path('test/', include('api.modules.test.urls')),
+    path('upload/', include('api.modules.upload.urls')),
     path('user/', include('api.modules.user.urls'))
 ]
