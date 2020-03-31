@@ -10,7 +10,7 @@
 - learn 学习笔记目录
 - push.sh 快捷提交脚本
 
-# 学习Python，爱上Python！
+# 学习Python！
 ## 学习计划
 1. [熟悉Python语法](learn/learnPython.md)
 2. [快速入门 Django](learn/quickStartDjango.md)
