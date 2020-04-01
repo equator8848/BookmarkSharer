@@ -155,7 +155,7 @@ class TSiteLabelRef(models.Model):
 
 class TTest(models.Model):
     name = models.CharField(max_length=64)
-    birthday = models.CharField(max_length=64)
+    birthday = models.DateTimeField()
 
     class Meta:
         managed = False

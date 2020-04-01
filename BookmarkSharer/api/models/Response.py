@@ -1,5 +1,6 @@
+from datetime import datetime
+from collections import Iterable
 from enum import Enum, unique
-
 from django.http import JsonResponse
 
 
@@ -25,7 +26,21 @@ class Response:
         print(res.__dict__)
         print(Response.__dict__)
         return JsonResponse(res, safe=False,
-                            json_dumps_params={'ensure_ascii': False, 'default': lambda obj: obj.__dict__})
+                            json_dumps_params={'ensure_ascii': False,
+                                               'default': lambda obj: obj.strftime('%Y-%m-%d %H:%M:%S') if
+                                               isinstance(obj, datetime)
+                                               else [o.__dict__ for o in obj] if isinstance(obj, Iterable)
+                                               else obj.__dict__})
+
+    @staticmethod
+    def transfer(obj):
+        if isinstance(obj, Iterable):
+            temp = []
+            for o in obj:
+                temp.append(o.__dict__)
+            return temp
+        else:
+            return obj.__dict__
 
     @staticmethod
     def success(msg, data):
