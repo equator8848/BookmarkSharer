@@ -119,7 +119,7 @@ class DjangoSession(models.Model):
 
 
 class TLabel(models.Model):
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=128)
     create_time = models.DateTimeField()
     modify_time = models.DateTimeField()
     status = models.IntegerField()
@@ -143,8 +143,8 @@ class TSite(models.Model):
 
 
 class TSiteLabelRef(models.Model):
-    site = models.ForeignKey(TSite, models.DO_NOTHING)
-    label = models.ForeignKey(TLabel, models.DO_NOTHING)
+    site_id = models.PositiveIntegerField()
+    label_id = models.PositiveIntegerField()
     create_time = models.DateTimeField()
     status = models.IntegerField()
 
@@ -176,8 +176,8 @@ class TUser(models.Model):
 
 
 class TUserClickLog(models.Model):
-    site = models.ForeignKey(TSite, models.DO_NOTHING)
-    user = models.ForeignKey(TUser, models.DO_NOTHING)
+    site_id = models.PositiveIntegerField()
+    user_id = models.PositiveIntegerField()
     create_time = models.DateTimeField()
 
     class Meta:
@@ -186,8 +186,8 @@ class TUserClickLog(models.Model):
 
 
 class TUserLabelRef(models.Model):
-    user = models.ForeignKey(TUser, models.DO_NOTHING)
-    label = models.ForeignKey(TLabel, models.DO_NOTHING)
+    user_id = models.PositiveIntegerField()
+    label_id = models.PositiveIntegerField()
     create_time = models.DateTimeField()
     status = models.IntegerField()
 

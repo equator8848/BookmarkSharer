@@ -16,11 +16,13 @@ class BookmarkParser:
         for e in elements:
             if e.string is None:
                 continue
+            if len(e['href']) > 512 or len(e.string) > 512:
+                continue
             words = jieba.cut(re.sub("[\s+\.\!\/_,$%^*(+\"\']+|[+——！，。？、~@#￥%……\-\·\（\）:&*（）]+", "", e.string),
                               cut_all=False)
             labels = []
             for word in words:
-                if len(word) <= 1:
+                if len(word) <= 1 or len(word) > 128:
                     continue
                 labels.append(word)
             self.__site_list.append(Site(e.string, e['href'], labels))

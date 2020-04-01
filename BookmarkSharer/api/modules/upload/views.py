@@ -1,5 +1,5 @@
 import time
-
+from datetime import datetime
 from ..analysis.BookmarkParser import BookmarkParser
 from ...models.DataStatus import DataStatus
 from ...models.Response import Response
@@ -30,7 +30,7 @@ def insert_site_if_not_exists(site):
         new_site.name = site.get_title
         new_site.base_url = site.get_url
         new_site.click_num = 0
-        new_site.create_time = time.localtime(time.time())
+        new_site.create_time = datetime.now()
         new_site.modify_time = new_site.create_time
         new_site.status = DataStatus.NORMAL.value
         new_site.save()
@@ -41,12 +41,12 @@ def insert_site_if_not_exists(site):
 
 # 插入标签
 def insert_label_if_not_exists(label):
-    saved_labels = TLabel.objects.get(name='name')
+    saved_labels = TLabel.objects.filter(name=label)
     if len(saved_labels) == 0:
         new_label = TLabel()
         new_label.name = label
         new_label.status = DataStatus.NORMAL.value
-        new_label.create_time = time.localtime(time.time())
+        new_label.create_time = datetime.now()
         new_label.modify_time = new_label.create_time
         new_label.save()
         return False, new_label.id
@@ -56,8 +56,8 @@ def insert_label_if_not_exists(label):
 
 def insert_site_label_ref(site_id, label_id):
     ref = TSiteLabelRef()
-    ref.site = site_id
-    ref.label = label_id
+    ref.site_id = site_id
+    ref.label_id = label_id
     ref.status = DataStatus.NORMAL.value
-    ref.create_time = time.localtime(time.time())
+    ref.create_time = datetime.now()
     ref.save()
