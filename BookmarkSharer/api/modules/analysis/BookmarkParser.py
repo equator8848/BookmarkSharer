@@ -2,8 +2,10 @@ import re
 from bs4 import BeautifulSoup
 import jieba
 
+# 书签解析器 （标题，URL，[标签]）
+from ...models.Site import Site
 
-# 书签解析器
+
 class BookmarkParser:
     def __init__(self):
         self.__site_list = []
@@ -21,7 +23,7 @@ class BookmarkParser:
                 if len(word) <= 1:
                     continue
                 labels.append(word)
-            self.__site_list.append((e.string, e['href'], labels))
+            self.__site_list.append(Site(e.string, e['href'], labels))
 
     def get_site_list(self):
         return self.__site_list
