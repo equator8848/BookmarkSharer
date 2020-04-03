@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from .SecretConfiguration import SecretConfiguration
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -29,8 +30,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'sharer.apps.SharerConfig'
-    'polls.apps.PollsConfig',
+    'api.apps.ApiConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,7 +44,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',  # 跨域中间件，注意顺序
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -105,16 +105,31 @@ WSGI_APPLICATION = 'BookmarkSharer.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    },
-    'mysql': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'db_bookmark_sharer',
-        'USER': 'root',
-        'PASSWORD': '123456'
+        'USER': SecretConfiguration.MYSQL_USERNAME.value,
+        'PASSWORD': SecretConfiguration.MYSQL_PASSWORD.value,
+        'HOST': SecretConfiguration.MYSQL_HOST.value,
+        'PORT': SecretConfiguration.MYSQL_PORT.value,
+        'OPTIONS': {
+            'charset': 'utf8mb4'
+        }
     }
 }
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': SecretConfiguration.REDIS_LOCATION.value,
+        "OPTIONS": {
+            "CLIENT_CLASS": 'django_redis.client.DefaultClient',
+            "PASSWORD": SecretConfiguration.REDIS_PASSWORD.value
+        }
+    }
+}
+REDIS_TIMEOUT = 7 * 24 * 60 * 60
+CUBES_REDIS_TIMEOUT = 60 * 60
+NEVER_REDIS_TIMEOUT = 365 * 24 * 60 * 60
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -145,7 +160,8 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+# 是否跨时区
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/

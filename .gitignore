@@ -1,7 +1,6 @@
 /venv
-
-BookmarkSharer/BookmarkSharer/settings.py
-
+# 账号密码信息
+BookmarkSharer/BookmarkSharer/SecretConfiguration.py
 
 .DS_Store
 node_modules/
