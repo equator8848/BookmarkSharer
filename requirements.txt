@@ -5,6 +5,7 @@ chardet==3.0.4
 decorator==4.4.2
 Django==2.2.10
 django-cors-headers==3.2.1
+django-redis==4.11.0
 graphviz==0.13.2
 idna==2.9
 jieba==0.42.1
@@ -16,6 +17,7 @@ paddlepaddle-tiny==1.6.1
 protobuf==3.11.3
 PyMySQL==0.9.3
 pytz==2019.3
+redis==3.4.1
 requests==2.23.0
 six==1.14.0
 soupsieve==2.0
