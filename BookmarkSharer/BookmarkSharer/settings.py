@@ -26,6 +26,7 @@ SECRET_KEY = '-)*2bwd2zlk=ia3(snf(3*#&=lr4f^ra7c+u4esy54y*%6_iio'
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    'www.equator8848.xyz',
     '132.232.2.232'
 ]
 
