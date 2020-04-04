@@ -27,7 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'www.equator8848.xyz',
-    '132.232.2.232'
+    '132.232.2.232',
+    '127.0.0.1'
 ]
 
 # Application definition

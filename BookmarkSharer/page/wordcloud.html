@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>词云</title>
+    <script src="https://cdn.bootcss.com/wordcloud2.js/1.1.0/wordcloud2.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<div id="canvas-container" align="center">
+    <canvas id="canvas" width="1500px" height="700px"></canvas>
+</div>
+<script>
+    var labelList = []
+    $.ajaxSettings.async = false
+    $.get('https://www.equator8848.xyz/bookmarkSharer/api/label/get_hot_label', function (data) {
+        labelList = data.data
+    })
+    var words = new Array()
+    labelList.forEach(label => {
+        var temp = new Array()
+        temp[0] = label.name
+        temp[1] = label.hotPoint
+        words.push(temp)
+    })
+    var options = eval({
+        "list": words,
+        "gridSize": 16, // size of the grid in pixels
+        "weightFactor": 3, // number to multiply for size of each word in the list
+        "fontWeight": 'normal', // 'normal', 'bold' or a callback
+        "fontFamily": 'Times, serif', // font to use
+        "color": 'random-light', // 'random-dark' or 'random-light'
+        "backgroundColor": '#333', // the color of canvas
+        "rotateRatio": 1 // probability for the word to rotate. 1 means always rotate
+    });
+    var canvas = document.getElementById('canvas');
+    WordCloud(canvas, options);
+</script>
+</body>
+</html>
