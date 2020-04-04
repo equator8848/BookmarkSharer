@@ -1,6 +1,6 @@
-# bookmarksharer
+# web
 
-> A Vue.js project for BookmarkSharer
+> A Vue.js project
 
 ## Build Setup
 
