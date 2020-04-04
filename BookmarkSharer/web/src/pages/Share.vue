@@ -2,7 +2,7 @@
   <div>
     <my-header/>
     <div id="container">
-      <img src="@/assets/images/wordcloud.png">
+      <p>share</p>
     </div>
     <my-footer/>
   </div>
@@ -13,7 +13,7 @@
   import MyFooter from '@/components/MyFooter'
 
   export default {
-    name: 'Index',
+    name: 'Share',
     components: {
       MyHeader,
       MyFooter
@@ -21,12 +21,6 @@
   }
 </script>
 
-<style scoped lang="less">
-  #container {
-    background-color: gray;
+<style scoped>
 
-    img {
-      width: 100%;
-    }
-  }
 </style>
