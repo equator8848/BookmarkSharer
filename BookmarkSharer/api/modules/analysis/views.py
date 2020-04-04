@@ -14,7 +14,7 @@ scheduler.add_jobstore(DjangoJobStore(), 'default')
 @register_job(scheduler, 'interval', id='update_hot_label', hours=12)
 def update_hot_label():
     hot_labels = get_hot_label(100)
-    cache.set(CacheKey.HOT_LABELS.value, hot_labels)
+    cache.set(CacheKey.HOT_LABELS.value, hot_labels, timeout=None)
 
 
 def get_hot_label(size):
@@ -33,7 +33,7 @@ def get_hot_label(size):
 
 def update_hot_label_manual(req):
     hot_labels = get_hot_label(100)
-    cache.set(CacheKey.HOT_LABELS.value, hot_labels)
+    cache.set(CacheKey.HOT_LABELS.value, hot_labels, timeout=None)
     return Response.success('OK', hot_labels)
 
 
