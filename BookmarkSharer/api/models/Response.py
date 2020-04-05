@@ -7,6 +7,7 @@ from django.http import JsonResponse
 # 状态码
 @unique
 class StatusCode(Enum):
+    FAIL = -1
     SUCCESS = 2000
     BAD_REQUEST = 4000
     PARAMETER_ERROR = 4001
@@ -39,6 +40,10 @@ class Response:
             return temp
         else:
             return obj.__dict__
+
+    @staticmethod
+    def fail(msg, data=None):
+        return Response.response(Response(StatusCode.FAIL.value, msg, data))
 
     @staticmethod
     def success(msg, data=None):

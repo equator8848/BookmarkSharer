@@ -1,29 +1,62 @@
-import time
+import logging
+import uuid
 from datetime import datetime
 from ..analysis.BookmarkParser import BookmarkParser
 from ...models.DataStatus import DataStatus
 from ...models.Response import Response
 from ...models.models import TLabel, TSite, TSiteLabelRef
+from collections import defaultdict
+from django.core.cache import cache
+import threading
 
 
 def upload_bookmark(req):
+    is_share = req.POST.get('isShare')
     bookmark_file = req.FILES.get('bookmark')
     if bookmark_file is None:
         return Response.parameter_error('请上传文件~', None)
     parser = BookmarkParser()
     parser.parse(bookmark_file)
     site_list = parser.get_site_list()
+    page_id = str(uuid.uuid1())
+    threading.Thread(target=__save_labels, args=(page_id, site_list, is_share), name='save_labels').start()
+    return Response.success('书签上传成功，感恩您的分享', {
+        'pageId': page_id
+    })
+
+
+def __save_labels(page_id, site_list, is_share):
+    __save_site_and_label_cache(page_id, site_list)
+    if is_share:
+        logging.debug("save to mysql ...")
+        __save_site_and_label_db(site_list)
+
+
+def __save_site_and_label_cache(page_id, site_list):
+    # 标签 name -> hotPoint 的映射
+    labels = defaultdict(lambda: 0)
     for site in site_list:
-        site_is_exists, site_id = insert_site_if_not_exists(site)
+        for label in site.get_labels:
+            labels[label] = labels[label] + 1
+    # 保存一天
+    labels_list = []
+    for key, val in labels.items():
+        labels_list.append((key, val))
+    # logging.debug(labels_list)
+    cache.set(page_id, labels_list, timeout=86400)
+
+
+def __save_site_and_label_db(site_list):
+    for site in site_list:
+        site_is_exists, site_id = __insert_site_if_not_exists(site)
         if not site_is_exists:
             for label in site.get_labels:
-                label_is_exists, label_id = insert_label_if_not_exists(label)
-                insert_site_label_ref(site_id, label_id)
-    return Response.success('书签上传成功，感恩您的分享', None)
+                label_is_exists, label_id = __insert_label_if_not_exists(label)
+                __insert_site_label_ref(site_id, label_id)
 
 
 # 插入站点
-def insert_site_if_not_exists(site):
+def __insert_site_if_not_exists(site):
     saved_sites = TSite.objects.filter(base_url=site.get_url)
     if len(saved_sites) == 0:
         new_site = TSite()
@@ -40,7 +73,7 @@ def insert_site_if_not_exists(site):
 
 
 # 插入标签
-def insert_label_if_not_exists(label):
+def __insert_label_if_not_exists(label):
     saved_labels = TLabel.objects.filter(name=label)
     if len(saved_labels) == 0:
         new_label = TLabel()
@@ -54,7 +87,7 @@ def insert_label_if_not_exists(label):
         return True, saved_labels[0].id
 
 
-def insert_site_label_ref(site_id, label_id):
+def __insert_site_label_ref(site_id, label_id):
     ref = TSiteLabelRef()
     ref.site_id = site_id
     ref.label_id = label_id
