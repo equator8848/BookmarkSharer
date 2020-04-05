@@ -1,5 +1,6 @@
 from . import http_helper
-from ....BookmarkSharer.SecretConfiguration import SecretConfiguration
+# from BookmarkSharer.BookmarkSharer.SecretConfiguration import SecretConfiguration
+from BookmarkSharer.SecretConfiguration import SecretConfiguration
 
 
 def access_token(code):

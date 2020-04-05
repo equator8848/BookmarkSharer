@@ -1,0 +1,2 @@
+def out():
+    print("out ...")
