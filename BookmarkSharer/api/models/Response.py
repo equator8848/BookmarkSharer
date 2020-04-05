@@ -28,9 +28,7 @@ class Response:
         return JsonResponse(res, safe=False,
                             json_dumps_params={'ensure_ascii': False,
                                                'default': lambda obj: obj.strftime('%Y-%m-%d %H:%M:%S') if
-                                               isinstance(obj, datetime)
-                                               else [o.__dict__ for o in obj] if isinstance(obj, Iterable)
-                                               else obj.__dict__})
+                                               isinstance(obj, datetime) else obj.__dict__})
 
     @staticmethod
     def transfer(obj):
@@ -43,21 +41,21 @@ class Response:
             return obj.__dict__
 
     @staticmethod
-    def success(msg, data):
+    def success(msg, data=None):
         return Response.response(Response(StatusCode.SUCCESS.value, msg, data))
 
     @staticmethod
-    def bad_request(msg, data):
+    def bad_request(msg, data=None):
         return Response.response(Response(StatusCode.BAD_REQUEST.value, msg, data))
 
     @staticmethod
-    def parameter_error(msg, data):
+    def parameter_error(msg, data=None):
         return Response.response(Response(StatusCode.PARAMETER_ERROR.value, msg, data))
 
     @staticmethod
-    def forbidden(msg, data):
+    def forbidden(msg, data=None):
         return Response.response(Response(StatusCode.FORBIDDEN.value, msg, data))
 
     @staticmethod
-    def server_error(msg, data):
+    def server_error(msg, data=None):
         return Response.response(Response(StatusCode.SERVER_ERROR.value, msg, data))

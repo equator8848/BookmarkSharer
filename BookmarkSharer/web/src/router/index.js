@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Hot from '@/pages/Hot'
 import Index from '@/pages/Index'
 import Login from '@/pages/Login'
+import Search from '@/pages/Search'
 import Share from '@/pages/Share'
 import SiteList from '@/pages/SiteList'
 
@@ -29,6 +30,11 @@ export default new Router({
       path: '/share',
       name: 'Share',
       component: Share
+    },
+    {
+      path: '/search',
+      name: 'Search',
+      component: Search
     },
     {
       path: '/siteList/:labelId',

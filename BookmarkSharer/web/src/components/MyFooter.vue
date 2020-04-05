@@ -28,6 +28,10 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
+    a {
+      text-decoration: none;
+      color: lightseagreen;
+    }
 
     #footer-left img {
       width: 128px;

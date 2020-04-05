@@ -1,8 +1,13 @@
 <template>
   <div>
     <my-header/>
-    <label-list-board content-name="热门站点" :labelList="labelList"></label-list-board>
-    <label-list-board content-name="猜你喜欢" :labelList="labelList"></label-list-board>
+    <div id="container">
+      <div id="inputBoard">
+        <input type="text" id="searchInput">
+        <input type="button" id="searchSubmit" value="搜索一下">
+      </div>
+      <label-list-board content-name="搜索结果" :label-list="labelList"></label-list-board>
+    </div>
     <my-footer/>
   </div>
 </template>
@@ -13,11 +18,11 @@
   import LabelListBoard from '@/components/LabelListBoard'
 
   export default {
-    name: 'Hot',
+    name: 'Search',
     components: {
+      LabelListBoard,
       MyHeader,
-      MyFooter,
-      LabelListBoard
+      MyFooter
     },
     data() {
       return {
@@ -58,6 +63,20 @@
   }
 </script>
 
-<style lang="less" scoped>
+<style scoped lang="less">
+  #container {
+    #inputBoard {
+      width: 40%;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px gray solid;
+      padding: 8px;
 
+      #searchInput {
+        width: 80%;
+      }
+    }
+  }
 </style>
