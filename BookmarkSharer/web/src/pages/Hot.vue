@@ -1,8 +1,12 @@
 <template>
   <div>
     <my-header/>
+    <div id="searchBoard">
+      <input type="text" id="searchInput">
+      <input type="button" id="searchSubmit" value="搜索一下">
+    </div>
     <label-list-board content-name="热门站点" :labelList="labelList"></label-list-board>
-    <label-list-board content-name="猜你喜欢" :labelList="labelList"></label-list-board>
+    <label-list-board content-name="猜你喜欢"></label-list-board>
     <my-footer/>
   </div>
 </template>
@@ -59,5 +63,17 @@
 </script>
 
 <style lang="less" scoped>
+  #searchBoard {
+    width: 40%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px gray solid;
+    padding: 8px;
 
+    #searchInput {
+      width: 80%;
+    }
+  }
 </style>
