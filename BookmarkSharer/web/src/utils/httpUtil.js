@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const instance = axios.create({
   // http://127.0.0.1:8000/bookmarkSharer/api/ https://www.equator8848.xyz/bookmarkSharer/api/
-  baseURL: 'http://127.0.0.1:8000/bookmarkSharer/api/'
+  baseURL: 'https://www.equator8848.xyz/bookmarkSharer/api/'
 })
 
 export default {
