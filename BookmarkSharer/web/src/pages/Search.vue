@@ -5,7 +5,6 @@
       <input type="text" id="searchInput">
       <input type="button" id="searchSubmit" value="搜索一下">
     </div>
-    <label-list-board content-name="热门站点" :labelList="labelList"></label-list-board>
     <label-list-board content-name="猜你喜欢"></label-list-board>
     <my-footer/>
   </div>

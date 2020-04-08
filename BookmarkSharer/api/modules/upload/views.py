@@ -43,6 +43,7 @@ def __save_site_and_label_cache(page_id, site_list):
     for key, val in labels.items():
         labels_list.append((key, val))
     # logging.debug(labels_list)
+    labels_list.sort(key=lambda obj: obj[1], reverse=True)
     cache.set(page_id, labels_list, timeout=86400)
 
 

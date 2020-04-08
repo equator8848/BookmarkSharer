@@ -37,12 +37,13 @@ def update_hot_label_manual(req):
     cache.set(CacheKey.HOT_LABELS.value, hot_labels, timeout=None)
     return Response.success('OK', hot_labels)
 
+
 def get_labels_by_page_id(req):
     page_id = req.GET.get('pageId')
     labels = cache.get(page_id)
     if labels is None:
         return Response.fail('暂时没有数据，请稍后再刷新吧~')
-    return Response.success('获取成功',labels)
+    return Response.success('获取成功', labels[:128])
 
 
 register_events(scheduler)
