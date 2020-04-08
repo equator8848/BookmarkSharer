@@ -25,11 +25,18 @@
           let result = res.data
           if (result.status == this.$httpUtil.statusCode.SUCCESS) {
             this.labels = result.data
+            var maxHotPoint = 0;
+            this.labels.forEach(label=>{
+              if (label[1]>maxHotPoint){
+                maxHotPoint = label[1]
+              }
+            })
+            console.log(maxHotPoint)
             console.log('数据：', this.labels.length);
             let wc = WordCloud(this.$refs.wordCloudBoard, {
               list: this.labels,
               gridSize: 16,
-              weightFactor: 3,
+              weightFactor: maxHotPoint<10?32:3,
               fontWeight: 'normal',
               color: 'random-light',
               rotateRatio: 1,
