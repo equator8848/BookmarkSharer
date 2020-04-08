@@ -1,7 +1,7 @@
 <template>
   <div id="container">
     <div id="canvasContainer">
-      <canvas id="wordCloudBoard" ref="wordCloudBoard" width="1500px" height="700px"></canvas>
+      <canvas id="wordCloudBoard" ref="wordCloudBoard" width="1500px" height="960px"></canvas>
     </div>
   </div>
 </template>
@@ -31,9 +31,9 @@
               gridSize: 16,
               weightFactor: 3,
               fontWeight: 'normal',
-              color: 'random-dark',
+              color: 'random-light',
               rotateRatio: 1,
-              backgroundColor: 'aliceblue'
+              backgroundColor: '#333'
             })
           } else {
             console.log('没有获取到数据！');
