@@ -12,7 +12,7 @@ django-redis==4.11.0
 graphviz==0.13.2
 idna==2.9
 jieba==0.42.1
-lxml==4.5.0
+lxml==4.6.3
 mysqlclient==1.4.6
 numpy==1.18.2
 objgraph==3.4.1
