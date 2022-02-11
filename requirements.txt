@@ -17,7 +17,7 @@ mysqlclient==1.4.6
 numpy==1.18.2
 objgraph==3.4.1
 paddlepaddle-tiny==1.6.1
-protobuf==3.11.3
+protobuf==3.15.0
 pytz==2019.3
 redis==3.4.1
 requests==2.23.0
